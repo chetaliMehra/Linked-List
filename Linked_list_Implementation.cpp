@@ -96,6 +96,100 @@ public:
         }
         
     }
+    void pop_front(){
+        if(head==NULL){
+            cout<<"List is already empty!!"<<endl;
+            return;
+        }
+        Node *temp=head;
+        head=head->next;
+        temp->next=NULL;
+        delete temp;
+        if(head==NULL){
+            tail=NULL;
+        }
+    }
+    void pop_back(){
+        if(tail==NULL){
+            cout<<"Linked list is empty!"<<endl;
+        }
+        Node *temp= head;
+        while(temp->next!=tail){ // incase we dont have tail,use this: if (temp->next->next==NULL)
+            temp=temp->next;
+        }
+        temp->next=NULL;
+        delete tail;
+        tail=temp;
+    }
+    int searchItr(int val){
+        if(head==NULL){
+            cout<<"Linked List is empty!!"<<endl;
+            return 0;
+        }
+        Node *temp=head;
+        int i=0;
+        while(temp!=NULL){
+            if(temp->data ==val){
+                return i;
+            }
+            temp=temp->next;
+            i++;
+        }
+        return -1;
+    }
+    int helper(Node *head, int val){
+        if(head==NULL){
+            return -1;
+        }
+        if(head->data==val){
+            return 0;
+        }
+        int idx=helper(head->next,val);
+        if(idx==-1){
+            return -1;
+        }
+        return idx+1;
+    }
+    int searchRecursively(int val){
+        Node *temp=head;
+        int idx=helper(temp,val);
+        return idx;
+    }
+    
+    void reverse(){
+        if(head==NULL){
+            cout<<"Linked List is empty!"<<endl;
+            return;
+        }
+        tail=head;
+        Node *prev=NULL,*curr=head,*nextPtr=NULL;
+        while(curr!=NULL){
+            nextPtr=curr->next;
+            curr->next=prev;
+            prev=curr;
+            curr=nextPtr;
+        }
+        head=prev;
+    }
+    
+    void remove_nth(int n){
+        if(head==NULL){
+            cout<<"Linked List is empty!!"<<endl;
+            return;
+        }
+        Node *prev=NULL,*nextPtr=NULL,*curr=head;
+        int i=0;
+        while(i<n){
+            nextPtr=curr->next;
+            prev=curr;
+            curr=nextPtr;
+            i++;
+        }
+        curr->next=NULL;
+        prev->next=nextPtr;
+        delete curr;
+    }
+    
 };
 
 // when we allocate memory using new keyword, we can delete it using delete keyword
@@ -110,8 +204,21 @@ int main() {
     ll.push_back(5);
     ll.push_back(6);
     ll.printList();
-    ll.insert(100,-4);
+    ll.insert(100,4);
     ll.printList();
-
+    ll.pop_front();
+    cout<<"LL after pop front: ";
+    ll.printList();
+    ll.pop_back();
+    cout<<"LL after pop back: ";
+    ll.printList();
+    cout<<"Element 100 found at index: "<<ll.searchItr(100)<<endl;
+    cout<<"Element 5 found at index: "<<ll.searchRecursively(5)<<endl;
+    cout<<"Reversed Linked List: ";
+    ll.reverse();
+    ll.printList();
+    cout<<"Linked list after removing 2nd position element: ";
+    ll.remove_nth(2);
+    ll.printList();
     return 0;
 }
