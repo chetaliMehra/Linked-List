@@ -156,10 +156,10 @@ public:
         return idx;
     }
     
-    void reverse(){
+    Node *reverse(){
         if(head==NULL){
             cout<<"Linked List is empty!"<<endl;
-            return;
+            return head;
         }
         tail=head;
         Node *prev=NULL,*curr=head,*nextPtr=NULL;
@@ -170,6 +170,7 @@ public:
             curr=nextPtr;
         }
         head=prev;
+        return head;
     }
     
     void remove_nth(int n){
@@ -177,18 +178,102 @@ public:
             cout<<"Linked List is empty!!"<<endl;
             return;
         }
-        Node *prev=NULL,*nextPtr=NULL,*curr=head;
+        Node *prev=NULL,*curr=head;
         int i=0;
         while(i<n){
-            nextPtr=curr->next;
             prev=curr;
-            curr=nextPtr;
+            curr=curr->next;
             i++;
         }
+        prev->next=curr->next;
         curr->next=NULL;
-        prev->next=nextPtr;
         delete curr;
     }
+    int size(){
+        int sz=0;
+        if(head==NULL){
+            return 0;
+        }
+        Node *temp=head;
+        while(temp!=NULL){
+            sz++;
+            temp=temp->next;
+        }
+        return sz;
+    }
+    void remove_nth_from_last(int n){
+        if(head==NULL){
+            cout<<"Linked List is empty!!"<<endl;
+            return;
+        }
+        if(n<=0){
+            cout<<"Position Invalid"<<endl;
+            return;
+        }
+        if(n==1){
+            pop_back();
+            return;
+        }
+        int len=size();
+        if(n>len){
+            cout<<"Position Invalid"<<endl;
+            return;
+        }
+        if(n==len){
+            pop_front();
+            return;
+        }
+        Node *prev=head;
+        for(int i=0;i<(len-n-1);i++){ //i want to go to its previous element
+            prev=prev->next;
+        }
+        Node *toDel=prev->next;
+        cout<<"Element to be deleted : "<<toDel->data<<endl;
+        prev->next=prev->next->next;
+        toDel->next=NULL;
+        delete toDel;
+        
+    }
+    void isPalindrome(){
+        if(head==NULL){
+            cout<<"Linked List is empty!!"<<endl;
+            return;
+        }
+        Node *temp=head;
+        // printList();
+        Node *tempRev=reverse();
+        while(temp!=NULL){
+            if(temp->data!=tempRev->data){
+                cout<<"Not Palindrome"<<endl;
+                // printList();
+                return;
+            }
+            temp=temp->next;
+            tempRev=tempRev->next;
+        }
+        
+        cout<<"It is Plaindrome"<<endl;
+    }
+    // void isPalindrome(){
+    //     if(head==NULL){
+    //         cout<<"Linked List is empty!!"<<endl;
+    //         return;
+    //     }
+    //     int len=size();
+    //     Node *temp=head;
+    //     Node *ptr1=NULL,*ptr2=NULL;
+    //     int i;
+    //     for (i=0;i<len/2;i++){
+    //         temp=temp->next;
+    //     }
+    //     ptr1=temp->next;
+    //     ptr2=ptr1->next;
+    //     for(i=len/2;i<n;i++){
+            
+    //     }
+        
+    // }
+    
     
 };
 
@@ -196,29 +281,38 @@ public:
 
 int main() {
     List ll;
-    ll.push_front(1);
-    ll.push_front(2);
     ll.push_front(3);
+    ll.push_front(2);
+    ll.push_front(5);
+    ll.push_front(2);
+    // ll.push_front(3);
+    // ll.printList();
+    // ll.push_back(4);
+    // ll.push_back(5);
+    // ll.push_back(6);
+    // ll.printList();
+    // ll.insert(100,4);
+    // ll.printList();
+    // ll.pop_front();
+    // cout<<"LL after pop front: ";
+    // ll.printList();
+    // ll.pop_back();
+    // cout<<"LL after pop back: ";
+    // ll.printList();
+    // cout<<"Element 100 found at index: "<<ll.searchItr(100)<<endl;
+    // cout<<"Element 5 found at index: "<<ll.searchRecursively(5)<<endl;
+    // cout<<"Reversed Linked List: ";
+    // List l2;
+    // l2.printList();
+    // ll.printList();
+    // cout<<"Linked list after removing 2nd position element: ";
+    // ll.remove_nth(2);
+    // ll.printList();
+    // cout<<"Linked list after removing 2nd position element from last: ";
+    // ll.remove_nth_from_last(2);;
+    // ll.printList();
     ll.printList();
-    ll.push_back(4);
-    ll.push_back(5);
-    ll.push_back(6);
-    ll.printList();
-    ll.insert(100,4);
-    ll.printList();
-    ll.pop_front();
-    cout<<"LL after pop front: ";
-    ll.printList();
-    ll.pop_back();
-    cout<<"LL after pop back: ";
-    ll.printList();
-    cout<<"Element 100 found at index: "<<ll.searchItr(100)<<endl;
-    cout<<"Element 5 found at index: "<<ll.searchRecursively(5)<<endl;
-    cout<<"Reversed Linked List: ";
-    ll.reverse();
-    ll.printList();
-    cout<<"Linked list after removing 2nd position element: ";
-    ll.remove_nth(2);
+    ll.isPalindrome();
     ll.printList();
     return 0;
 }
